@@ -12,7 +12,12 @@
       <!-- Title & Budget Banner -->
       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8 flex justify-between items-center">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">{{ trip().name }}</h1>
+          <h1 class="text-3xl font-bold text-gray-900">{{ trip().name }}
+            <a [routerLink]="['/trip', trip().id, 'journal']" 
+              class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+              Open Match Journal
+            </a>
+          </h1>
           <p class="text-gray-500 mt-1">{{ trip().startDate | date }} - {{ trip().endDate | date }}</p>
         </div>
         <div class="text-right">

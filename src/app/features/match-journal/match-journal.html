@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-gray-50 p-8">
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="mb-6 flex justify-between items-center">
+      <a [routerLink]="['/trip', tripId()]" class="text-blue-600 hover:underline flex items-center gap-2">
+        ← Back to Trip Details
+      </a>
+      <h1 class="text-3xl font-bold text-gray-900">Match Journal</h1>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left Column: New Entry Form -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-6">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">Log a Memory</h2>
+          
+          <form [formGroup]="journalForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Match / Event</label>
+              <input type="text" formControlName="title" placeholder="e.g. G.O.A.T India Tour"
+                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Stadium</label>
+              <input type="text" formControlName="stadium" placeholder="e.g. Salt Lake Stadium"
+                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Date</label>
+              <input type="date" formControlName="matchDate"
+                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Notes & Memories</label>
+              <textarea formControlName="notes" rows="4" placeholder="Incredible atmosphere from the stands..."
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"></textarea>
+            </div>
+            
+            <button type="submit" [disabled]="journalForm.invalid"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400">
+              Save Entry
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Timeline Feed -->
+      <div class="lg:col-span-2 space-y-6">
+        @for (entry of entries(); track entry.id) {
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative">
+            <!-- Timeline dot indicator -->
+            <div class="absolute -left-3 top-8 w-6 h-6 bg-indigo-100 border-4 border-white rounded-full flex items-center justify-center">
+              <div class="w-2 h-2 bg-indigo-600 rounded-full"></div>
+            </div>
+            
+            <div class="flex justify-between items-start mb-4 border-l-4 border-indigo-500 pl-4">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900">{{ entry.title }}</h3>
+                <p class="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  {{ entry.stadium }}
+                </p>
+              </div>
+              <span class="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
+                {{ entry.matchDate | date }}
+              </span>
+            </div>
+            
+            <p class="text-gray-700 leading-relaxed pl-4">
+              {{ entry.notes }}
+            </p>
+          </div>
+        } @empty {
+          <div class="text-center py-12 bg-white rounded-lg border border-dashed border-gray-300">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No memories yet</h3>
+            <p class="mt-1 text-sm text-gray-500">Log your first match day experience.</p>
+          </div>
+        }
+      </div>
+      
+    </div>
+  </div>
+</div>
