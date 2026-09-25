@@ -12,4 +12,12 @@ export class Trip {
   getTrips(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+
+  getTripById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  addExpense(tripId: number, expense: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${tripId}/expenses`, expense);
+  }
 }
