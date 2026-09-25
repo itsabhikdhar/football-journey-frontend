@@ -27,8 +27,26 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <!-- Left Column: Add Expense Form -->
-        <div class="lg:col-span-1">
+        <!-- Left Column -->
+        <div class="lg:col-span-1 space-y-8">
+          
+          <!-- New Chart Card -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Budget Breakdown</h2>
+            
+            @if (expenses().length > 0) {
+              <canvas baseChart
+                [data]="chartData()"
+                [options]="chartOptions"
+                type="doughnut">
+              </canvas>
+            } @else {
+              <div class="text-center py-8 text-gray-500">
+                <p>No expenses yet.</p>
+                <p class="text-sm mt-1">Your chart will appear here.</p>
+              </div>
+            }
+          </div>
           <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">Log Expense</h2>
             

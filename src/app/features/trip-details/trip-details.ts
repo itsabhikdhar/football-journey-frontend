@@ -1,16 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Trip } from '../../core/services/trip';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import id from '@angular/common/locales/id';
+import { ChartConfiguration, ChartData } from 'chart.js';
 
 @Component({
   selector: 'app-trip-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, BaseChartDirective],
+  providers: [provideCharts(withDefaultRegisterables())],
   templateUrl: './trip-details.html',
 })
-export class TripDetails {
+export class TripDetails implements OnInit {
   private route = inject(ActivatedRoute);
   private tripService = inject(Trip);
   private fb = inject(FormBuilder);
@@ -18,6 +22,30 @@ export class TripDetails {
   trip = signal<any>(null);
   expenses = signal<any[]>([]);
   showToast = signal<boolean>(false);
+
+  chartData = computed<ChartData<'doughnut'>>(() => {
+    const currentExpenses = this.expenses();
+
+    const grouped = currentExpenses.reduce((acc: any, curr: any) => {
+      acc[curr.category] = (acc[curr.category] || 0) + curr.amount;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return {
+      labels: Object.keys(grouped),
+      datasets: [{
+        data: Object.values(grouped),
+        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280'],
+      }]
+    };
+  });
+
+  chartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' }
+    }
+  };
 
   expenseForm = this.fb.group({
     description: ['', Validators.required],
