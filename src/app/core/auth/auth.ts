@@ -24,15 +24,22 @@ export class Auth {
   }
 
   logout() {
-    localStorage.removeItem('auth_token');
+    if (typeof window === 'undefined') {
+      localStorage.removeItem('auth_token');
+    }
     this.router.navigate(['/login']);
   }
   
   private setToken(token: string) {
-    localStorage.setItem('auth_token', token);
+    if (typeof window === 'undefined') {
+      localStorage.setItem('auth_token', token);
+    }
   }
 
   isAuthenticated(): boolean {
+    if (typeof window === 'undefined') {
+      return false;
+    }
     return !!localStorage.getItem('auth_token');
   }
 }

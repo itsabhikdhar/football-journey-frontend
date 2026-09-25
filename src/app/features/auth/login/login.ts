@@ -22,14 +22,8 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Sending login request...')
       this.auth.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          console.log('Login successful', res);
-          this.router.navigate(['/dashboard']).then(success => {
-            console.log('Navigation to dashboard was successful:', success);
-          });
-        },
+        next: () => this.router.navigate(['/dashboard']),
         error: (err) => console.error('Login failed', err),
       });
     }
