@@ -18,8 +18,12 @@ export class Auth {
   }
 
   login(credentials: any) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
-      tap((res) => this.setToken(res.token))
+    return this.http.post<any>('http://localhost:8080/api/auth/login', credentials).pipe(
+      tap(res => {
+        if (typeof window !== 'undefined' && res.token) {
+          localStorage.setItem('auth_token', res.token);
+        }
+      })
     );
   }
 
